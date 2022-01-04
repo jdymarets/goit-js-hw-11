@@ -49,7 +49,7 @@ async function onSubmit(e) {
 }
 
 async function onScroll() {
-  if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight) {
+  if (window.scrollY + window.innerHeight + 10 >= document.documentElement.scrollHeight) {
     if (totalHitsView >= searchPixabay.totalHits) {
       Notify.warning(`We're sorry, but you've reached the end of search results.`);
       window.removeEventListener('scroll', debouncedScroll);
