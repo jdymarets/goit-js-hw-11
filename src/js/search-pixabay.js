@@ -1,0 +1,56 @@
+import 'regenerator-runtime/runtime';
+import axios from 'axios';
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
+
+export default class SearchPixabay {
+  #KEY = '25076946-406015110a75827c7826516f1';
+  #BASE_URL = 'https://pixabay.com/api/';
+
+  constructor() {
+    this.searchQuery = '';
+    this.page = 1;
+    this.totalHits = 0;
+  }
+
+  async fetchSearch() {
+    const paramsFetch = new URLSearchParams({
+      key: this.#KEY,
+      q: this.searchQuery,
+      image_type: 'photo',
+      orientation: 'horizontal',
+      safesearch: true,
+      page: this.page,
+      per_page: 40,
+    });
+
+    try {
+      const response = await axios.get(`${this.#BASE_URL}?${paramsFetch}`);
+      const { hits, totalHits } = response.data;
+      this.totalHits = totalHits;
+
+      if (!hits.length) {
+        throw new Error('Sorry, there are no images matching your search query. Please try again.');
+      }
+
+      return hits;
+    } catch (error) {
+      Notify.failure(error.message);
+    }
+  }
+
+  incrementPage() {
+    this.page += 1;
+  }
+
+  resetPage() {
+    this.page = 1;
+  }
+
+  get query() {
+    return this.searchQuery;
+  }
+
+  set query(newQuery) {
+    this.searchQuery = newQuery;
+  }
+}
