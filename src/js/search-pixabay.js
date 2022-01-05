@@ -1,6 +1,5 @@
 import 'regenerator-runtime/runtime';
 import axios from 'axios';
-import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
 export default class SearchPixabay {
   #KEY = '25076946-406015110a75827c7826516f1';
@@ -23,19 +22,11 @@ export default class SearchPixabay {
       per_page: 40,
     });
 
-    try {
-      const response = await axios.get(`${this.#BASE_URL}?${paramsFetch}`);
-      const { hits, totalHits } = response.data;
-      this.totalHits = totalHits;
+    const response = await axios.get(`${this.#BASE_URL}?${paramsFetch}`);
+    const { hits, totalHits } = response.data;
+    this.totalHits = totalHits;
 
-      if (!hits.length) {
-        throw new Error('Sorry, there are no images matching your search query. Please try again.');
-      }
-
-      return hits;
-    } catch (error) {
-      Notify.failure(error.message);
-    }
+    return hits;
   }
 
   incrementPage() {

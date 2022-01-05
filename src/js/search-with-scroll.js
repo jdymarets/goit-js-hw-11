@@ -4,11 +4,13 @@ import 'simplelightbox/dist/simple-lightbox.min.css';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import debounce from 'lodash.debounce';
 import SearchPixabay from './search-pixabay';
+import { toggleSpinner, checkResponse, showErrorMessage, startSmoothScroll } from './utils';
+import renderMarkupGalleryPage from './render-gallery-page';
 
 const refs = {
   formSearch: document.querySelector('.search-form'),
   gallery: document.querySelector('.gallery'),
-  loaderEllips: document.querySelector('.loader-ellips'),
+  spinner: document.querySelector('.loader-ellips'),
 };
 
 const searchPixabay = new SearchPixabay();
@@ -31,12 +33,12 @@ async function onSubmit(e) {
     return;
   }
 
-  toggleSpinner();
+  toggleSpinner(refs.spinner);
 
   const response = await loadImages();
 
-  toggleSpinner();
-  refs.formSearch.reset();
+  toggleSpinner(refs.spinner);
+  e.target.reset();
 
   if (!response?.length) {
     return;
@@ -56,79 +58,33 @@ async function onScroll() {
       return;
     }
 
-    toggleSpinner();
+    toggleSpinner(refs.spinner);
 
     const response = await loadImages();
 
     totalHitsView += response?.length;
-    toggleSpinner();
+    toggleSpinner(refs.spinner);
+    startSmoothScroll('gallery');
   }
 }
 
 async function loadImages() {
-  const resultSearch = await searchPixabay.fetchSearch();
+  try {
+    const resultSearch = await searchPixabay.fetchSearch();
 
-  if (!resultSearch) {
+    checkResponse(resultSearch);
+
+    renderMarkupGalleryPage(resultSearch, refs.gallery);
+
+    galleryModal.refresh();
+
+    searchPixabay.incrementPage();
+
+    return resultSearch;
+  } catch (error) {
+    showErrorMessage(error);
     return;
   }
-
-  renderMarkupGallery(resultSearch);
-
-  galleryModal.refresh();
-
-  searchPixabay.incrementPage();
-
-  return resultSearch;
-}
-
-function renderMarkupGallery(items) {
-  const galleryMarkup = createMarkupGallery(items);
-  refs.gallery.insertAdjacentHTML('beforeend', galleryMarkup);
-}
-
-function createMarkupGallery(items) {
-  return items.map(createMarkupElement).join('');
-}
-
-function createMarkupElement({
-  webformatURL,
-  largeImageURL,
-  tags,
-  likes,
-  views,
-  comments,
-  downloads,
-}) {
-  return `
-    <a class="photo-card" href="${largeImageURL}">
-      <img class="photo-card__img" src="${webformatURL}" alt="${tags}" loading="lazy" width="277.5" height="180"/>
-      <ul class="info">
-        <li>
-          <p class="info-item">
-            <b>Likes</b>
-          </p>
-          <p>${likes}</p>
-        </li>
-        <li>
-          <p class="info-item">
-            <b>Views</b>
-          </p>
-          <p>${views}</p>
-        </li>
-        <li>
-          <p class="info-item">
-            <b>Comments</b>
-          </p>
-          <p>${comments}</p>
-        </li>
-        <li>
-          <p class="info-item">
-            <b>Downloads</b>
-          </p>
-          <p>${downloads}</p>
-        </li>
-      </ul>
-    </a>`;
 }
 
 function reset() {
@@ -136,8 +92,4 @@ function reset() {
   searchPixabay.resetPage();
   totalHitsView = 0;
   window.removeEventListener('scroll', debouncedScroll);
-}
-
-function toggleSpinner() {
-  refs.loaderEllips.classList.toggle('is-hidden');
 }
