@@ -58,3 +58,7 @@
   animation-name: reveal;
   animation-direction: reverse;
 }
+
+function createMarkupGallery(items) {
+  return items.map(createMarkupElement).join('');
+}

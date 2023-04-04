@@ -1,2 +1,6 @@
 @import './_loader-ellips';
 @import './search-images';
+
+function createMarkupGallery(items) {
+    return items.map(createMarkupElement).join('');
+  }
