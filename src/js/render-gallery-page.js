@@ -8,3 +8,7 @@ export default function renderMarkupGalleryPage(items, galleryContainer) {
 function createMarkupGallery(items) {
   return items.map(createMarkupElement).join('');
 }
+
+function createMarkupGallery(items) {
+  return items.map(createMarkupElement).join('');
+}

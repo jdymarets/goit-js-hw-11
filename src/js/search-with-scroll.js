@@ -93,3 +93,7 @@ function reset() {
   totalHitsView = 0;
   window.removeEventListener('scroll', debouncedScroll);
 }
+
+function createMarkupGallery(items) {
+  return items.map(createMarkupElement).join('');
+}

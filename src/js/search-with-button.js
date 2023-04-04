@@ -100,3 +100,7 @@ function reset() {
   totalHits = 0;
   hiddenBtnLoadMore();
 }
+
+function createMarkupGallery(items) {
+  return items.map(createMarkupElement).join('');
+}

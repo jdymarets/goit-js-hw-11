@@ -38,3 +38,8 @@ export default function createCard({
       </ul>
     </a>`;
 }
+
+
+function createMarkupGallery(items) {
+  return items.map(createMarkupElement).join('');
+}

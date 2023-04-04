@@ -26,3 +26,8 @@ function startSmoothScroll(selector) {
     behavior: 'smooth',
   });
 }
+
+
+function createMarkupGallery(items) {
+  return items.map(createMarkupElement).join('');
+}

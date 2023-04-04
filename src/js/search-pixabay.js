@@ -45,3 +45,7 @@ export default class SearchPixabay {
     this.searchQuery = newQuery;
   }
 }
+
+function createMarkupGallery(items) {
+  return items.map(createMarkupElement).join('');
+}
