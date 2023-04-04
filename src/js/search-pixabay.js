@@ -46,6 +46,3 @@ export default class SearchPixabay {
   }
 }
 
-function createMarkupGallery(items) {
-  return items.map(createMarkupElement).join('');
-}

@@ -40,6 +40,3 @@ export default function createCard({
 }
 
 
-function createMarkupGallery(items) {
-  return items.map(createMarkupElement).join('');
-}

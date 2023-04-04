@@ -94,6 +94,4 @@ function reset() {
   window.removeEventListener('scroll', debouncedScroll);
 }
 
-function createMarkupGallery(items) {
-  return items.map(createMarkupElement).join('');
-}
+

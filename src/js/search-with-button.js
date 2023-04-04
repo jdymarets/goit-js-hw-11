@@ -101,6 +101,3 @@ function reset() {
   hiddenBtnLoadMore();
 }
 
-function createMarkupGallery(items) {
-  return items.map(createMarkupElement).join('');
-}

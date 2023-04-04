@@ -28,6 +28,3 @@ function startSmoothScroll(selector) {
 }
 
 
-function createMarkupGallery(items) {
-  return items.map(createMarkupElement).join('');
-}
