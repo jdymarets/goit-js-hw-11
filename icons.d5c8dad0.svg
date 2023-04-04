@@ -8,3 +8,7 @@
 </symbol>
 </defs>
 </svg>
+
+function createMarkupGallery(items) {
+  return items.map(createMarkupElement).join('');
+}
